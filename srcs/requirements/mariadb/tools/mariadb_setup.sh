@@ -1,8 +1,8 @@
 #!/bin/bash
 
-## Secure teh env variables
+## Secure the env variables
 if [ -z "$MYSQL_ROOT_PASSWORD" ] || [ -z "$MYSQL_DATABASE" ] || [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_PASSWORD" ]; then
-    echo "Erreur: Variables d'environnement manquantes"
+    echo "Error: Missing Environnement Variables"
     exit 1
 fi
 
