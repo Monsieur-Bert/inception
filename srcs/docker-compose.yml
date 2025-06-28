@@ -1,8 +1,8 @@
 ## List of all the services
 services:
   mariadb:
-    build: ./requirements/mariadb
     container_name: mariadb
+    build: ./requirements/mariadb
     restart: always
     env_file: .env
     volumes:
@@ -13,8 +13,8 @@ services:
       - "3306"
 
   wordpress:
-    build: ./requirements/wordpress
     container_name: wordpress
+    build: ./requirements/wordpress
     restart:  always
     env_file: .env
     depends_on:
@@ -25,6 +25,21 @@ services:
       - inception_network
     expose:
       - "9000"
+
+  nginx:
+    container_name: nginx
+    build: ./requirements/nginx
+    restart: always
+    env_file: .env
+    depends_on:
+      - mariadb
+      - wordpress
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception_network
+    ports:
+      - "443:443"
 
 ## Used volumes
 volumes:

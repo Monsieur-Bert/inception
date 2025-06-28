@@ -6,7 +6,7 @@
 #    By: antauber <antauber@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/26 15:47:48 by bert              #+#    #+#              #
-#    Updated: 2025/06/27 17:36:43 by antauber         ###   ########.fr        #
+#    Updated: 2025/06/28 18:01:28 by antauber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,17 @@ NAME			= inception
 LOGIN			= $(shell whoami)
 COMPOSE_FILE	= srcs/docker-compose.yml
 DOCK			= docker compose -f $(COMPOSE_FILE)
+
+
+# ########################################################################### ##
+#	ANSI_CODES																  ##
+## ########################################################################## ##
+
+GREEN		:=	\033[1;32m
+BLUE		:=	\033[1;34m
+RED			:=	\033[1;31m
+YELLOW		:=	\033[1;33m
+RESET		:=	\033[0m
 
 
 ## ########################################################################## ##
@@ -61,9 +72,12 @@ re: clean
 ## ########################################################################## ##
 
 status:
+	@printf "$(YELLOW)--> Containers Status (docker ps)$(RESET)\n"
 	@$(DOCK) ps
-	docker volume ls
-	docker images ls
+	@printf "$(YELLOW)--> Volumes Status (docker volume)$(RESET)\n"
+	@docker volume ls
+	@printf "$(YELLOW)--> Images Status (docker image)$(RESET)\n"
+	@docker image ls
 
 logs:
 	$(DOCK) logs -f
@@ -79,6 +93,15 @@ logs-wordpress:
 
 ## ! ajouter des tests de connectivité
 
+enter-mariadb:
+	docker exec -it mariadb bash
 
+enter-nginx:
+	docker exec -it nginx bash
 
-.PHONY: build up down log status clean re
+enter-wordpress:
+	docker exec -it wordpress bash
+
+.PHONY: build up status down clean fclean re \
+		logs logs-mariadb logs-nginx logs-wordpress \
+		enter-mariadb enter-nginx enter-wordpress 

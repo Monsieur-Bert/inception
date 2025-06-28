@@ -23,7 +23,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 RUN mkdir -p /run/php && chown www-data:www-data /run/php
 
 ## COPY PHP Configuration
-COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d
+COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
 
 ## Define Workdirecty
 WORKDIR /var/www/html
@@ -37,4 +37,3 @@ EXPOSE 9000
 
 ## Use script as entrypoint
 ENTRYPOINT ["/var/www/html/wordpress_setup.sh"]
-CMD ["php-fpm7.4", "-F"]
