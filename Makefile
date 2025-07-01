@@ -6,7 +6,7 @@
 #    By: antauber <antauber@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/26 15:47:48 by bert              #+#    #+#              #
-#    Updated: 2025/06/28 18:01:28 by antauber         ###   ########.fr        #
+#    Updated: 2025/07/01 11:39:43 by antauber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,8 @@ RESET		:=	\033[0m
 #   RECIPES																	  ##
 ## ########################################################################## ##
 
+all: build up
+
 ## Launch conatainers without rebuild
 up:
 	@mkdir -p /home/$(LOGIN)/data/mariadb /home/$(LOGIN)/data/wordpress /home/$(LOGIN)/data/nginx
@@ -43,6 +45,7 @@ up:
 
 ## Build Dockers images without launch containers
 build:
+	docker rmi srcs-mariadb srcs-nginx srcs-wordpress 
 	$(DOCK) build
 
 ## Stop containers
@@ -59,12 +62,16 @@ clean: down
 ## Full clean and delete all images and volumes. No dockers remaining on system
 fclean: clean
 	docker system prune -af --volumes
-	$(MAKE) status
+	$(MAKE) --no-print-directory status
+
+## Clear only the cache build
+prune-cache:
+	docker builder prune -f
 
 ## Complete rebuild
 re: clean 
-	$(MAKE) build
-	$(MAKE) up
+	$(MAKE) --no-print-directory build
+	$(MAKE) --no-print-directory up
 
 
 ## ########################################################################## ##
@@ -78,6 +85,7 @@ status:
 	@docker volume ls
 	@printf "$(YELLOW)--> Images Status (docker image)$(RESET)\n"
 	@docker image ls
+	@docker system df
 
 logs:
 	$(DOCK) logs -f
@@ -102,6 +110,6 @@ enter-nginx:
 enter-wordpress:
 	docker exec -it wordpress bash
 
-.PHONY: build up status down clean fclean re \
+.PHONY: build up status down clean fclean re prune-cache \
 		logs logs-mariadb logs-nginx logs-wordpress \
 		enter-mariadb enter-nginx enter-wordpress 

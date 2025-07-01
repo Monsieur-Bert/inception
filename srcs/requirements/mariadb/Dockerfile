@@ -17,8 +17,9 @@ COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/
 ## Create repository for datas
 RUN mkdir -p /var/lib/mysql && chown -R mysql:mysql /var/lib/mysql
 
-## Expose port
+## Expose Port 3306
 EXPOSE 3306
 
 ## Use script as entrypoint
 ENTRYPOINT ["/usr/local/bin/mariadb_setup.sh"]
+

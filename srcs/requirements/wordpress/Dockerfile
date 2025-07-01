@@ -12,6 +12,7 @@ RUN apt-get update && apt-get upgrade -y && \
     php7.4-xml\
     php7.4-zip \
     curl \
+	mariadb-client \
 	netcat
 
 ## Install WP-CLI
@@ -27,6 +28,8 @@ COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
 
 ## Define Workdirecty
 WORKDIR /var/www/html
+
+RUN chown -R root:root /var/www/html
 
 ## Copy setup script
 COPY ./tools/wordpress_setup.sh .

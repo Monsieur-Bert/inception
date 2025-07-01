@@ -1,13 +1,17 @@
 #!/bin/bash
-
 set -e
 
 echo "=== Start WP Setup ==="
 echo "=== Waiting Db ==="
 ## Wait for Mariadb to be ready
-while ! nc -z mariadb 3306; do
+# while ! nc -z mariadb 3306; do
+# 	sleep 1
+# done
+
+while ! mariadb -h mariadb -u $MYSQL_USER -p$MYSQL_PASSWORD <<< "SHOW DATABSES;"; do
 	sleep 1
 done
+
 echo "=== ✅ DB Ready ✅ ==="
 
 cd /var/www/html
