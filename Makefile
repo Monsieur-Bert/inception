@@ -6,7 +6,7 @@
 #    By: antauber <antauber@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/26 15:47:48 by bert              #+#    #+#              #
-#    Updated: 2025/07/01 11:39:43 by antauber         ###   ########.fr        #
+#    Updated: 2025/07/02 15:06:48 by antauber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,12 +40,12 @@ all: build up
 
 ## Launch conatainers without rebuild
 up:
-	@mkdir -p /home/$(LOGIN)/data/mariadb /home/$(LOGIN)/data/wordpress /home/$(LOGIN)/data/nginx
+	@mkdir -p /home/$(LOGIN)/data/mariadb /home/$(LOGIN)/data/wordpress
 	$(DOCK) up -d
 
 ## Build Dockers images without launch containers
 build:
-	docker rmi srcs-mariadb srcs-nginx srcs-wordpress 
+	- docker rmi srcs-mariadb srcs-nginx srcs-wordpress 
 	$(DOCK) build
 
 ## Stop containers
@@ -55,9 +55,8 @@ down:
 ## Stop and delete volumes and orphans containers
 clean: down
 	$(DOCK) down -v --remove-orphans
-	@rm -rf /home/$(LOGIN)/data/mariadb
-	@rm -rf /home/$(LOGIN)/data/wordpress
-	@rm -rf /home/$(LOGIN)/data/nginx
+	sudo rm -rf /home/antauber/data/mariadb/*
+	sudo rm -rf /home/antauber/data/wordpress/*
 
 ## Full clean and delete all images and volumes. No dockers remaining on system
 fclean: clean

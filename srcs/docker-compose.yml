@@ -4,36 +4,52 @@ services:
     container_name: mariadb
     build: ./requirements/mariadb
     restart: unless-stopped
-    env_file: .env
+    env_file:
+      - .env
     volumes:
       - mariadb_data:/var/lib/mysql
     networks:
       - inception_network
     expose:
       - "3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   wordpress:
     container_name: wordpress
     build: ./requirements/wordpress
     restart: on-failure
-    env_file: .env
+    env_file:
+      - .env
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
     volumes:
       - wordpress_data:/var/www/html
     networks:
       - inception_network
     expose:
       - "9000"
+    healthcheck:
+      test: ["CMD-SHELL", "netstat -tnlp | grep :9000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   nginx:
     container_name: nginx
     build: ./requirements/nginx
     restart: on-failure
-    env_file: .env
+    env_file:
+      - .env
     depends_on:
-      - mariadb
-      - wordpress
+      wordpress:
+        condition: service_started
+      mariadb:
+        condition: service_healthy
     volumes:
       - wordpress_data:/var/www/html
     networks:
@@ -48,14 +64,14 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/${USER}/data/mariadb
+      device: /home/$USER/data/mariadb
 
   wordpress_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/${USER}/data/wordpress
+      device: /home/$USER/data/wordpress
 
 ## Network specs
 networks:

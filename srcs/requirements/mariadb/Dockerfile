@@ -2,10 +2,8 @@
 FROM debian:bullseye
 
 ## Install MariaDB
-RUN apt-get update && apt-get upgrade -y \
-    mariadb-server \
-    mariadb-client \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y mariadb-server
 
 ## Copy configuration script, add permissions
 COPY tools/mariadb_setup.sh /usr/local/bin
@@ -13,13 +11,11 @@ RUN chmod +x /usr/local/bin/mariadb_setup.sh
 
 ## Copy perso configuration
 COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/
+COPY ./tools/mariadb_setup.sh .
 
 ## Create repository for datas
 RUN mkdir -p /var/lib/mysql && chown -R mysql:mysql /var/lib/mysql
 
-## Expose Port 3306
-EXPOSE 3306
-
 ## Use script as entrypoint
-ENTRYPOINT ["/usr/local/bin/mariadb_setup.sh"]
+CMD ["mariadb_setup.sh"]
 

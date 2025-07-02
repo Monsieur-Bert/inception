@@ -1,18 +1,8 @@
 #!/bin/bash
+
 set -e
 
 echo "=== Start WP Setup ==="
-echo "=== Waiting Db ==="
-## Wait for Mariadb to be ready
-# while ! nc -z mariadb 3306; do
-# 	sleep 1
-# done
-
-while ! mariadb -h mariadb -u $MYSQL_USER -p$MYSQL_PASSWORD <<< "SHOW DATABSES;"; do
-	sleep 1
-done
-
-echo "=== ✅ DB Ready ✅ ==="
 
 cd /var/www/html
 
@@ -25,7 +15,7 @@ if [ ! -f wp-config.php ] && [ ! -d wp-admin ]; then
 	## Wordpress Configuration
 	wp config create \
 	--dbname="$MYSQL_DATABASE" \
-	--dbuser="$MYSQL_USER"\
+	--dbuser="$MYSQL_USER" \
 	--dbpass="$MYSQL_PASSWORD" \
 	--dbhost="mariadb:3306" \
 	--allow-root
@@ -56,10 +46,12 @@ if [ ! -f wp-config.php ] && [ ! -d wp-admin ]; then
 	--allow-root
 fi
 
-echo "=== Correct pernmissions ==="
+echo "=== Correct permissions ==="
 chown -R www-data:www-data /var/www/html
 chmod 755 /var/www/html
 
 echo "=== TRY LAUNCH PHP ==="
 php-fpm7.4 -t
-exec php-fpm7.4 -F
+
+echo "=== LAUNCH PHP-FPM ==="
+exec php-fpm7.4 --nodaemonize --fpm-config /etc/php/7.4/fpm/php-fpm.conf

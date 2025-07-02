@@ -7,13 +7,8 @@ RUN apt-get update && apt-get upgrade -y && \
     php7.4-fpm \
     php7.4-mysql \
     php7.4-curl \
-    php7.4-gd \
-    php7.4-mbstring \
     php7.4-xml\
-    php7.4-zip \
-    curl \
-	mariadb-client \
-	netcat
+    curl 
 
 ## Install WP-CLI
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
@@ -32,11 +27,8 @@ WORKDIR /var/www/html
 RUN chown -R root:root /var/www/html
 
 ## Copy setup script
-COPY ./tools/wordpress_setup.sh .
-RUN chmod +x wordpress_setup.sh
-
-## Expose port
-EXPOSE 9000
+COPY ./tools/wordpress_setup.sh /setup/wordpress_setup.sh
+RUN chmod +x /setup/wordpress_setup.sh
 
 ## Use script as entrypoint
-ENTRYPOINT ["/var/www/html/wordpress_setup.sh"]
+CMD ["/setup/wordpress_setup.sh"]

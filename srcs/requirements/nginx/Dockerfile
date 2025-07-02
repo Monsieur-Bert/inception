@@ -4,7 +4,7 @@ FROM debian:bullseye
 RUN apt-get update && apt-get install -y \
     nginx \
     openssl \
-	gettext \
+    gettext \
     && rm -rf /var/lib/apt/lists/*
 
 ## Copy nginx configuration
@@ -19,9 +19,6 @@ RUN chmod +x /nginx_setup.sh
 
 ## Suppress nginx default configuration
 RUN rm -f /etc/nginx/sites-enabled/default
-
-## Expose Port 443
-EXPOSE 443
 
 ## Set script as entrypoint
 CMD ["/nginx_setup.sh"]

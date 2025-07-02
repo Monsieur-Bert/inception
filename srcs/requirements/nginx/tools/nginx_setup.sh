@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 ## Create SSL repository
 mkdir -p /etc/nginx/ssl
 mkdir -p /etc/nginx/nginx
@@ -9,13 +11,16 @@ if [ ! -f /etc/nginx/ssl/nginx.crt ]; then
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
         -keyout /etc/nginx/ssl/nginx.key \
         -out /etc/nginx/ssl/nginx.crt \
-        -subj "/C=FR/ST=France/L=Paris/O=42School/OU=student/CN=$DOMAIN_NAME" 2>/dev/null
+        -subj "/C=FR/ST=France/L=Angouleme/O=42School/OU=student/CN=$DOMAIN_NAME"
 fi
 
-## Env substitution ##? bizare un peu
+## Apply NGINX Conf
 envsubst '${DOMAIN_NAME}' < /etc/nginx/sites-available/default.conf > /etc/nginx/sites-available/default
+ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
-## Test nginx configuration
+
+## Test Nginx configuration
 nginx -t
 
+## Launch Nginx Configuration
 exec nginx -g "daemon off;"
