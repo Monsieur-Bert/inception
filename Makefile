@@ -6,7 +6,7 @@
 #    By: antauber <antauber@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/26 15:47:48 by bert              #+#    #+#              #
-#    Updated: 2025/07/02 15:06:48 by antauber         ###   ########.fr        #
+#    Updated: 2025/07/03 15:14:31 by antauber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,13 +55,13 @@ down:
 ## Stop and delete volumes and orphans containers
 clean: down
 	$(DOCK) down -v --remove-orphans
-	sudo rm -rf /home/antauber/data/mariadb/*
-	sudo rm -rf /home/antauber/data/wordpress/*
+	sudo rm -rf /home/$(LOGIN)/data/mariadb/*
+	sudo rm -rf /home/$(LOGIN)/data/wordpress/*
 
 ## Full clean and delete all images and volumes. No dockers remaining on system
 fclean: clean
 	docker system prune -af --volumes
-	$(MAKE) --no-print-directory status
+#! ISSU WITH FLCEAN $(MAKE) --no-print-directory status
 
 ## Clear only the cache build
 prune-cache:
@@ -80,6 +80,8 @@ re: clean
 status:
 	@printf "$(YELLOW)--> Containers Status (docker ps)$(RESET)\n"
 	@$(DOCK) ps
+	@printf "$(YELLOW)--> Containers IPs (docker ps)$(RESET)\n"
+	@docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}} - {{.Name}}' $$(docker ps -q)
 	@printf "$(YELLOW)--> Volumes Status (docker volume)$(RESET)\n"
 	@docker volume ls
 	@printf "$(YELLOW)--> Images Status (docker image)$(RESET)\n"
@@ -98,7 +100,18 @@ logs-nginx:
 logs-wordpress:
 	$(DOCK) logs -f wordpress
 
-## ! ajouter des tests de connectivité
+connectivity:
+	@printf "$(YELLOW)--> Ping Wordpress → MariaDB $(RESET)\n"
+	@docker exec wordpress ping -c 3 mariadb || echo "$(RED)Wordpress can't reach MariaDB$(RESET)\n"
+	@printf "$(YELLOW)--> Ping Wordpress → NGINX $(RESET)\n"
+	@docker exec wordpress ping -c 3 nginx || echo "$(RED)Wordpress can't reach NGINX$(RESET)\n"
+	@printf "$(YELLOW)--> Ping NGINX → Wordpress $(RESET)\n"
+	@docker exec nginx ping -c 3 wordpress || echo "$(RED)NGINX can't reach Wordpress$(RESET)\n"
+	@printf "$(YELLOW)--> Ping MariaDB → Wordpress $(RESET)\n"
+	@docker exec mariadb ping -c 3 wordpress || echo "$(RED)MariaDB can't reach Wordpress$(RESET)\n"
+
+##! add rules for databases
+##atabases:
 
 enter-mariadb:
 	docker exec -it mariadb bash

@@ -8,7 +8,11 @@ RUN apt-get update && apt-get upgrade -y && \
     php7.4-mysql \
     php7.4-curl \
     php7.4-xml\
-    curl 
+    curl \
+    iputils-ping
+
+## Remove unused cache from installation
+RUN rm -rf /var/lib/apt/lists/*
 
 ## Install WP-CLI
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
@@ -31,4 +35,4 @@ COPY ./tools/wordpress_setup.sh /setup/wordpress_setup.sh
 RUN chmod +x /setup/wordpress_setup.sh
 
 ## Use script as entrypoint
-CMD ["/setup/wordpress_setup.sh"]
+ENTRYPOINT ["/setup/wordpress_setup.sh"]

@@ -5,7 +5,10 @@ RUN apt-get update && apt-get install -y \
     nginx \
     openssl \
     gettext \
-    && rm -rf /var/lib/apt/lists/*
+    iputils-ping \
+
+## Remove unused cache from installation
+RUN rm -rf /var/lib/apt/lists/*
 
 ## Copy nginx configuration
 COPY /conf/default.conf /etc/nginx/sites-available/default.conf
@@ -21,4 +24,4 @@ RUN chmod +x /nginx_setup.sh
 RUN rm -f /etc/nginx/sites-enabled/default
 
 ## Set script as entrypoint
-CMD ["/nginx_setup.sh"]
+ENTRYPOINT ["/nginx_setup.sh"]

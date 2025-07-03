@@ -3,7 +3,10 @@ FROM debian:bullseye
 
 ## Install MariaDB
 RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y mariadb-server
+RUN apt-get install -y mariadb-server iputils-ping
+
+## Remove unused cache from installation
+RUN rm -rf /var/lib/apt/lists/*
 
 ## Copy configuration script, add permissions
 COPY tools/mariadb_setup.sh /usr/local/bin
@@ -17,5 +20,4 @@ COPY ./tools/mariadb_setup.sh .
 RUN mkdir -p /var/lib/mysql && chown -R mysql:mysql /var/lib/mysql
 
 ## Use script as entrypoint
-CMD ["mariadb_setup.sh"]
-
+ENTRYPOINT ["mariadb_setup.sh"]
