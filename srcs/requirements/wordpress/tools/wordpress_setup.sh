@@ -54,6 +54,21 @@ echo "=== Correct permissions ==="
 chown -R www-data:www-data /var/www/html
 chmod 755 /var/www/html
 
+echo "=== Redis Configuration ==="
+sed -i "/\/\* That's all, stop editing! Happy publishing. \*\//i \
+define('WP_REDIS_HOST', getenv('REDIS_HOST') ?: 'redis');\n\
+define('WP_REDIS_PORT', getenv('REDIS_PORT') ?: 6379);\n\
+define('WP_REDIS_TIMEOUT', 1);\n\
+define('WP_REDIS_READ_TIMEOUT', 1);\n\
+define('WP_REDIS_DATABASE', 0);\n\
+define('WP_CACHE', true);" /var/www/html/wp-config.php
+
+
+echo "=== Install Redis Object Cache and Activate it ==="
+wp plugin install redis-cache --activate --allow-root --path=/var/www/html
+wp redis enable --allow-root --path=/var/www/html
+
+
 echo "=== TRY LAUNCH PHP ==="
 php-fpm7.4 -t
 

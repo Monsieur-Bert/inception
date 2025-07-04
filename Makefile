@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: antauber <antauber@student.42.fr>          +#+  +:+       +#+         #
+#    By: bert <bert@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/26 15:47:48 by bert              #+#    #+#              #
-#    Updated: 2025/07/04 12:49:14 by antauber         ###   ########.fr        #
+#    Updated: 2025/07/04 17:20:17 by bert             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ up:
 
 ## Build Dockers images without launch containers
 build:
-	- docker rmi srcs-mariadb srcs-nginx srcs-wordpress 
+	- docker rmi srcs-mariadb srcs-nginx srcs-wordpress srcs-redis
 	$(DOCK) build
 
 ## Stop containers
@@ -99,21 +99,15 @@ logs-nginx:
 logs-wordpress:
 	$(DOCK) logs -f wordpress
 
+logs-redis:
+	$(DOCK) logs -f redis
+
 connectivity:
 	@printf "$(YELLOW)--> Ping Wordpress → MariaDB $(RESET)\n"
 	@docker exec wordpress ping -c 3 mariadb || echo "$(RED)Wordpress can't reach MariaDB$(RESET)\n"
 	@printf "$(YELLOW)--> Ping Wordpress → NGINX $(RESET)\n"
 	@docker exec wordpress ping -c 3 nginx || echo "$(RED)Wordpress can't reach NGINX$(RESET)\n"
 
-enter-mariadb:
-	docker exec -it mariadb bash
-
-enter-nginx:
-	docker exec -it nginx bash
-
-enter-wordpress:
-	docker exec -it wordpress bash
-
-.PHONY: build up status down clean fclean re prune-cache \
-		logs logs-mariadb logs-nginx logs-wordpress \
-		enter-mariadb enter-nginx enter-wordpress 
+.PHONY: build up down clean fclean re prune-cache \
+		status connectivity \
+		logs logs-mariadb logs-nginx logs-wordpress logs-redis
