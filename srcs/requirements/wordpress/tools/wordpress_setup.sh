@@ -3,7 +3,6 @@
 set -e
 
 echo "=== Start WP Setup ==="
-
 cd /var/www/html
 
 ## Download wp only if is not existing

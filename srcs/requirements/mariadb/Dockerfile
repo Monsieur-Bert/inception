@@ -2,22 +2,22 @@
 FROM debian:bullseye
 
 ## Install MariaDB
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y mariadb-server iputils-ping
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y mariadb-server
 
 ## Remove unused cache from installation
 RUN rm -rf /var/lib/apt/lists/*
 
-## Copy configuration script, add permissions
+## Create repository for datas && add to group
+RUN mkdir -p /var/lib/mysql && \
+    chown -R mysql:mysql /var/lib/mysql
+
+## Copy mariadb configuration
+COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/
+
+## Copy setup script, add permissions
 COPY tools/mariadb_setup.sh /usr/local/bin
 RUN chmod +x /usr/local/bin/mariadb_setup.sh
-
-## Copy perso configuration
-COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/
-COPY ./tools/mariadb_setup.sh .
-
-## Create repository for datas
-RUN mkdir -p /var/lib/mysql && chown -R mysql:mysql /var/lib/mysql
 
 ## Use script as entrypoint
 ENTRYPOINT ["mariadb_setup.sh"]

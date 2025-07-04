@@ -19,20 +19,20 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     chmod +x wp-cli.phar && \
     mv wp-cli.phar /usr/local/bin/wp
 
-## Create PHP_FPM repository
-RUN mkdir -p /run/php && chown www-data:www-data /run/php
+## Define Workdirecty
+WORKDIR /var/www/html
+
+## Create PHP_FPM repository && add to group
+RUN mkdir -p /run/php && \
+    chown www-data:www-data /run/php
 
 ## COPY PHP Configuration
 COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
 
-## Define Workdirecty
-WORKDIR /var/www/html
-
-RUN chown -R root:root /var/www/html
-
-## Copy setup script
+## Copy setup script, add persmissions and add group
 COPY ./tools/wordpress_setup.sh /setup/wordpress_setup.sh
-RUN chmod +x /setup/wordpress_setup.sh
+RUN chmod +x /setup/wordpress_setup.sh && \
+    chown -R root:root /var/www/html
 
 ## Use script as entrypoint
 ENTRYPOINT ["/setup/wordpress_setup.sh"]
