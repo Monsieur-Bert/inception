@@ -6,7 +6,7 @@
 #    By: antauber <antauber@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/26 15:47:48 by bert              #+#    #+#              #
-#    Updated: 2025/07/04 11:33:33 by antauber         ###   ########.fr        #
+#    Updated: 2025/07/04 12:49:14 by antauber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,6 @@ clean: down
 ## Full clean and delete all images and volumes. No dockers remaining on system
 fclean: clean
 	docker system prune -af --volumes
-#! ISSU WITH FLCEAN $(MAKE) --no-print-directory status
 
 ## Clear only the cache build
 prune-cache:

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+## Import 
+MYSQL_PASSWORD=$(< /run/secrets/mysql_password)
+MYSQL_ROOT_PASSWORD=$(< /run/secrets/mysql_root_password)
+
 set -e
 
 ## Secure the env variables

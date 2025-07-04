@@ -1,5 +1,10 @@
 #!/bin/bash
 
+## Read Secrets
+MYSQL_PASSWORD=$(< /run/secrets/mysql_password)
+WP_ADMIN_PASSWORD=$(< /run/secrets/wp_admin_password)
+WP_USER_PASSWORD=$(< /run/secrets/wp_user_password)
+
 set -e
 
 echo "=== Start WP Setup ==="
