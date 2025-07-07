@@ -95,6 +95,16 @@ services:
       timeout: 5s
       retries: 3
 
+  static_page:
+    container_name: static_page
+    build: ./requirements/bonus/static_page
+    restart: unless-stopped
+    networks:
+      - inception_network
+    expose:
+      - "81"
+
+
 ## Secrets Definition
 secrets:
   mysql_password:
