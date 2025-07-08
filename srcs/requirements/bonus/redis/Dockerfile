@@ -15,6 +15,6 @@ COPY conf/redis.conf /etc/redis/redis.conf
 RUN mkdir -p /var/lib/redis && \
     chown redis:redis /var/lib/redis
 
-## Use script as entrypoint
+## Launch server
 CMD ["redis-server", "/etc/redis/redis.conf", "--daemonize", "no"]
 

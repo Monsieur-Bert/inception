@@ -74,6 +74,10 @@ services:
         condition: service_healthy
       mariadb:
         condition: service_healthy
+      static_page:
+        condition: service_started
+      adminer:
+        condition: service_started
     volumes:
       - wordpress_data:/var/www/html
     networks:
@@ -104,6 +108,22 @@ services:
     expose:
       - "81"
 
+  adminer:
+    container_name: adminer
+    build: ./requirements/bonus/adminer
+    restart: always
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - inception_network
+    expose:
+      - "8080"
+    # healthcheck: 
+    #   test: ["CMD-SHELL", "curl -f http://localhost:8080/adminer.php || exit 1"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 3
 
 ## Secrets Definition
 secrets:
