@@ -13,9 +13,6 @@ WORKDIR /var/www/html
 ## Download Adminer
 RUN wget -O adminer.php https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1-mysql.php
 
-# ## Create non-root user 
-# RUN useradd -r -s /bin/false adminer
-
-## Launch PHP server
+## Launch Adminer
 CMD ["php", "-S", "0.0.0.0:8080", "adminer.php"]
 
