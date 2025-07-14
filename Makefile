@@ -6,7 +6,7 @@
 #    By: antauber <antauber@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/26 15:47:48 by bert              #+#    #+#              #
-#    Updated: 2025/07/14 10:42:51 by antauber         ###   ########.fr        #
+#    Updated: 2025/07/14 15:04:23 by antauber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ up:
 
 ## Build Dockers images without launch containers
 build:
-	- docker rmi srcs-mariadb srcs-nginx srcs-wordpress srcs-redis srcs-static_page srcs-adminer srcs-ftp srcs-glances
+	- docker rmi srcs-mariadb srcs-nginx srcs-wordpress srcs-redis srcs-static_page srcs-adminer srcs-ftp srcs-ctop
 	$(DOCK) build
 
 ## Stop containers
@@ -88,19 +88,10 @@ status:
 	@docker system df
 
 logs:
-	$(DOCK) logs -f
+	@$(DOCK) logs -f
 
-logs-mariadb:
-	$(DOCK) logs -f mariadb
-
-logs-nginx:
-	$(DOCK) logs -f nginx
-
-logs-wordpress:
-	$(DOCK) logs -f wordpress
-
-logs-redis:
-	$(DOCK) logs -f redis
+monitor:
+	@docker exec -it ctop /usr/local/bin/ctop
 
 connectivity:
 	@printf "$(YELLOW)--> Ping Wordpress → MariaDB $(RESET)\n"
@@ -109,5 +100,4 @@ connectivity:
 	@docker exec wordpress ping -c 3 nginx || echo "$(RED)Wordpress can't reach NGINX$(RESET)\n"
 
 .PHONY: build up down clean fclean re prune-cache \
-		status connectivity \
-		logs logs-mariadb logs-nginx logs-wordpress logs-redis
+		status connectivity monitor

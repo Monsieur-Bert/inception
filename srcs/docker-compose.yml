@@ -140,18 +140,30 @@ services:
       - "21:21"
       - "21100-21102:21100-21102"
 
-  glances:
-    container_name: glances
-    build: ./requirements/bonus/glances
+  ctop:
+    container_name: ctop
+    build: ./requirements/bonus/ctop
     restart: always
-    networks:
-      - inception_network
+    tty: true
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      wordpress:
+        condition: service_healthy
+      nginx:
+        condition: service_started
+      redis:
+        condition: service_started
+      static_page:
+        condition: service_started
+      adminer:
+        condition: service_started
+      ftp:
+        condition: service_started
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    privileged: true
-    pid: host
-    expose:
-      - "61208"
+    networks:
+      - inception_network
 
 ## Secrets Definition
 secrets:

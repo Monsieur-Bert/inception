@@ -4,6 +4,7 @@ FROM debian:bullseye
 ## Update dependencies
 RUN apt-get update -y && \
     apt-get install -y php php-mysqli wget curl
+
 ## Remove unused cache from installation
 RUN rm -rf /var/lib/apt/lists/*
 
