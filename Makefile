@@ -6,7 +6,7 @@
 #    By: antauber <antauber@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/26 15:47:48 by bert              #+#    #+#              #
-#    Updated: 2025/07/10 10:35:55 by antauber         ###   ########.fr        #
+#    Updated: 2025/07/14 10:42:51 by antauber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ up:
 
 ## Build Dockers images without launch containers
 build:
-	- docker rmi srcs-mariadb srcs-nginx srcs-wordpress srcs-redis srcs-static_page srcs-adminer srcs-ftp
+	- docker rmi srcs-mariadb srcs-nginx srcs-wordpress srcs-redis srcs-static_page srcs-adminer srcs-ftp srcs-glances
 	$(DOCK) build
 
 ## Stop containers

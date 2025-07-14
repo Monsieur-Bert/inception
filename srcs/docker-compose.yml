@@ -140,6 +140,19 @@ services:
       - "21:21"
       - "21100-21102:21100-21102"
 
+  glances:
+    container_name: glances
+    build: ./requirements/bonus/glances
+    restart: always
+    networks:
+      - inception_network
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    privileged: true
+    pid: host
+    expose:
+      - "61208"
+
 ## Secrets Definition
 secrets:
   mysql_password:
