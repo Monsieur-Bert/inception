@@ -1,5 +1,7 @@
 ## List of all the services
 services:
+
+  ## Mandatory Services
   mariadb:
     container_name: mariadb
     build: ./requirements/mariadb
@@ -27,7 +29,7 @@ services:
   wordpress:
     container_name: wordpress
     build: ./requirements/wordpress
-    restart: on-failure
+    restart: unless-stopped
     environment:
       - DOMAIN_NAME=${DOMAIN_NAME}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -66,7 +68,7 @@ services:
   nginx:
     container_name: nginx
     build: ./requirements/nginx
-    restart: on-failure
+    restart: unless-stopped
     env_file:
       - .env
     depends_on:
@@ -85,6 +87,7 @@ services:
     ports:
       - "443:443"
 
+  ## Bonus Services
   redis:
     container_name: redis
     build: ./requirements/bonus/redis
@@ -102,7 +105,7 @@ services:
   static_page:
     container_name: static_page
     build: ./requirements/bonus/static_page
-    restart: unless-stopped
+    restart: on-failure
     networks:
       - inception_network
     expose:
@@ -111,7 +114,7 @@ services:
   adminer:
     container_name: adminer
     build: ./requirements/bonus/adminer
-    restart: always
+    restart: on-failure
     depends_on:
       mariadb:
         condition: service_healthy
@@ -123,7 +126,7 @@ services:
   ftp:
     container_name: ftp
     build: ./requirements/bonus/ftp
-    restart: always
+    restart: on-failure
     environment:
       - FTP_USER=${FTP_USER}
       - PASV_ADDRESS=${DOMAIN_NAME}
@@ -143,7 +146,7 @@ services:
   ctop:
     container_name: ctop
     build: ./requirements/bonus/ctop
-    restart: always
+    restart: unless-stopped
     tty: true
     depends_on:
       mariadb:

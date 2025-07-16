@@ -6,12 +6,6 @@ MYSQL_ROOT_PASSWORD=$(< /run/secrets/mysql_root_password)
 
 set -e
 
-## Secure the env variables
-if [ -z "$MYSQL_ROOT_PASSWORD" ] || [ -z "$MYSQL_DATABASE" ] || [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_PASSWORD" ]; then
-    echo "Erreur: Missing Environnment Variables"
-    exit 1
-fi
-
 ## Init only for the first time
 if [ ! -d "var/log/mysql/mysql" ]; then
 

@@ -1,6 +1,7 @@
+## Based on the antepenultiam stable debian
 FROM debian:bullseye
 
-# Installer curl pour télécharger ctop
+## Update dependencies and install ctop
 RUN apt-get update && apt-get install -y curl ca-certificates && \
     curl -Lo /usr/local/bin/ctop https://github.com/bcicen/ctop/releases/download/v0.7.7/ctop-0.7.7-linux-amd64 && \
     chmod +x /usr/local/bin/ctop && \
