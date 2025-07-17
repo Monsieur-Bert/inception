@@ -31,7 +31,8 @@ To run the project, we need to ensure we have:
 ```bash
 sudo usermod -aG docker $USER
 ```
-*It's necessary to reboot the session (or log out/log in) to apply the group changes*- Updated `/etc/hosts` with your domain(s):
+*It's necessary to reboot the session (or log out/log in) to apply the group changes*
+- Updated `/etc/hosts` with your domain(s):
 ```bash
 127.0.0.1 antauber.42.fr
 127.0.0.1 adminer.antauber.42.fr	# BONUS Adminer
@@ -39,14 +40,13 @@ sudo usermod -aG docker $USER
 ```
 - Created:
   - a `.env` file under `srcs/`
-  - a `secrets/` folder with credentials (ignored in git)
-
+  - a `secrets/` folder with credentials
 > ⚠️ For security reasons, **never push `.env` or secrets** to any public repo — they’re only included locally for demonstration. (They are here as examples for this school project.)
 
 ***
 ## 📦 Makefile
 
-The `Makefile` manages the Docker Compose lifecycle:
+The **Makefile** manages the Docker Compose lifecycle:
 
 | Command         | Description                                          |
 |----------------|------------------------------------------------------|
@@ -72,7 +72,7 @@ This project uses a self-signed certificate. When we access our website, a warni
 
 ### 🏗️ Docker Compose
 
-**Docker Compose** is a tool for defining and launching multiple Docker containers with a .yml file. It orchestrates the containerization and deployment of software and packages. It allows you to choose which images to use for certain services, define environment variables, and configure server connections.
+**Docker Compose** is a tool for defining and launching multiple Docker containers with a `.yml` file. It orchestrates the containerization and deployment of software and packages. It allows you to choose which images to use for certain services, define environment variables, and configure server connections.
 
 Here I choose to use a `.env` and also `secrets` files, so that each service only has access to the variables it needs. The only drawback I find is that it is not compatible with `env_file:` option and is a bit verbose because every variable has to be declared in the docker-compose file.
 
@@ -109,9 +109,9 @@ SHOW tables;
 
 ### 🔗 Wordpress
 
-The **WordPress** software that creates your website. It uses PHP to generate pages and talks to the MariaDB database to get the data it needs.
+The **WordPress** software that creates our website. It uses PHP to generate pages and talks to the MariaDB database to get the data it needs.
 The WordPress installation wizard will run automatically on first access, using the database credentials from our configuration.
-We can connect to the admin page using `http://antauber.42.fr/wp-admin` and log in with the credentials defined in our .env and secrets files.
+We can connect to the admin page using `http://antauber.42.fr/wp-admin` and log in with the credentials defined in our `.env` and `secrets` files.
 
 ***
 ## 💎 Bonus Part
@@ -125,7 +125,7 @@ We can monitor it directly in the wordpress admin page.
 
 ### 🌐 FTP Server
 
-File transfer protocol enables the exchange of commands and data between a client (computer or software) and a server (FTP host).
+**File transfer protocol** enables the exchange of commands and data between a client (computer or software) and a server (FTP host).
 It's working here in a passive mode (because we're in a docker environnement), means we need to open port 21 for FTP comand and random ports between (21100-21103) for data transfer.
 
 We can use it with ftp command `ftp localhost 21` and:
@@ -147,7 +147,7 @@ We can connect to any database on our server with our browser page `http://admin
 **Ctop** is a free open source, simple and cross-platform top-like command-line tool for monitoring container metrics in real-time.
 It allows you to get an overview of metrics concerning CPU, memory, network, I/O for multiple containers and also supports inspection of a specific container.
 
-We need to enter into is container to use it with the docker exec -it ctop /usr/local/bin/ctop command. We can look at them or get logs, stop/pause them as we need.
+We need to enter into the container to use it with the `docker exec -it ctop /usr/local/bin/ctop` command. We can look at them or get logs, stop/pause them as we need.
 
 > Unfortunatly there is no web mode for this tools (because it's only a I/O content). I first try to use [Glances](https://glances.readthedocs.io/en/latest/docker.html) for monitor the containers but I wasn't able to look at only the containers (it was show me the all htop computer).
 
