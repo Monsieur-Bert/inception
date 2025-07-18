@@ -57,8 +57,6 @@ The **Makefile** manages the Docker Compose lifecycle:
 | `make connectivity` | Pings between services to check network connectivity |
 | `make monitor`  | Shortcut to launch the ctop tool inside its container |
 
-> ⚠️ **MariaDB Healthcheck**: Sometimes MariaDB may crash on init. A `make re` usually resolves it, but it resets the environment completely. Sorry for this...
-
 ***
 ## 🔐 Mandatory Part Overview
 
@@ -103,7 +101,7 @@ mysql -u<user> -p<password>
 This allow us to use SQL to communicate with our database server, and show our databses or access to our wordpress table.
 ```
 SHOW DATABASES;
-USE wordpress;
+USE wordpress_db;
 SHOW tables;
 ```
 
