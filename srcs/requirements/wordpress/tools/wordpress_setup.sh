@@ -15,7 +15,6 @@ if [ ! -f wp-config.php ] && [ ! -d wp-admin ]; then
 	echo "=== DL wp==="
 	wp core download --allow-root
 
-	echo "=== WP configuration ==="
 	## Wordpress Configuration
 	wp config create \
 	--dbname="$MYSQL_DATABASE" \

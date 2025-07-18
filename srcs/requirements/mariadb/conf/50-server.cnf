@@ -11,7 +11,7 @@ socket=/run/mysqld/mysqld.sock
 # * Basic Settings
 #
 
-user                    = root
+user                    = mysql
 pid-file                = /run/mysqld/mysqld.pid
 basedir                 = /usr
 datadir                 = /var/lib/mysql
@@ -22,11 +22,11 @@ skip-external-locking
 
 # Broken reverse DNS slows down connections considerably and name resolve is
 # safe to skip if there are no "host by domain name" access grants
-#skip-name-resolve
+skip-name-resolve
 
 # Instead of skip-networking the default is now to listen only on
 # localhost which is more compatible and is not less secure.
-bind-address            = mariadb
+bind-address            = 0.0.0.0
 
 #
 # * Fine Tuning
@@ -39,7 +39,7 @@ bind-address            = mariadb
 # This replaces the startup script and checks MyISAM tables if needed
 # the first time they are touched
 #myisam_recover_options = BACKUP
-#max_connections        = 100
+max_connections        = 100
 #table_cache            = 64
 
 #
@@ -100,7 +100,7 @@ collation-server      = utf8mb4_general_ci
 # Read the manual for more InnoDB related options. There are many!
 # Most important is to give InnoDB 80 % of the system RAM for buffer use:
 # https://mariadb.com/kb/en/innodb-system-variables/#innodb_buffer_pool_size
-#innodb_buffer_pool_size = 8G
+innodb_buffer_pool_size = 128M
 
 # this is only for embedded server
 [embedded]

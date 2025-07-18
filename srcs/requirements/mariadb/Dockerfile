@@ -12,6 +12,10 @@ RUN rm -rf /var/lib/apt/lists/*
 RUN mkdir -p /var/lib/mysql && \
     chown -R mysql:mysql /var/lib/mysql
 
+## Create repository for socket && add to group
+RUN mkdir -p /run/mysqld && \
+    chown -R mysql:mysql /run/mysqld
+
 ## Copy mariadb configuration
 COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/
 

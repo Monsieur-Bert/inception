@@ -1,13 +1,13 @@
 #!/bin/bash
 
-## Import 
+## Import secrets
 MYSQL_PASSWORD=$(< /run/secrets/mysql_password)
 MYSQL_ROOT_PASSWORD=$(< /run/secrets/mysql_root_password)
 
 set -e
 
 ## Init only for the first time
-if [ ! -d "var/log/mysql/mysql" ]; then
+if [ ! -d "/var/lib/mysql/$MYSQL_DATABASE" ]; then
 
     ## Init database
     mysql_install_db --user=mysql --datadir=/var/lib/mysql
