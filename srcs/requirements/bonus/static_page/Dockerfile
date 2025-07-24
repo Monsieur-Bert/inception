@@ -1,21 +1,18 @@
 ## Based on the antepenultiam stable debian
 FROM debian:bullseye
 
-## Install Apache
+## Install Pyhton3 (http server)
 RUN apt-get update -y && \
-    apt-get install -y apache2
+    apt-get install -y python3
 
 ## Remove unused cache from installation
 RUN rm -rf /var/lib/apt/lists/*
 
-## Modify listen port (81 insted of 80)
-RUN sed -i  's/80/81/g' /etc/apache2/ports.conf
-
-## Copy configuration files into default Apache service
+## Copy static files
 COPY ./html /var/www/html
 
-## Add Server Name to the end of the apach2.conf
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+## Set the server directory
+WORKDIR /var/www/html
 
 ## Launch Apache in foreground
-CMD ["apachectl", "-D", "FOREGROUND"]
+CMD ["python3", "-m", "http.server", "81"]
